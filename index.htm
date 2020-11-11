@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+html {
+  font-family: sans-serif;
+  margin-bottom: 3em;
+  line-height: 1.3em;
+}
+summary {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #888;
+}
+details {
+  border-top: solid 1px #ccc;
+  padding-top: 0.5em;
+  margin-top: 0.5em;
+}
+dt {
+  font-weight: bold;
+  margin-top: .5em;
+  opacity: .75;
+}
+
+label {
+  display: block;
+  margin-top: .5em;
+}
+textarea {
+  display: block;
+  font-family: sans-serif;
+  min-height: 5em;
+  min-width: 100%;
+}
+.key{
+  text-align: right;
+  margin-right: .5em;
+  display: inline-block;
+  min-width: 8em;
+}
+label.required .key::after {
+  content: " *";
+  font-weight: bold;
+  color: red;
+}
+input[type="checkbox"] {margin-left: 2em;}
+input[type="checkbox"]:first-child {margin-left: 0;}
+
+input[type="submit"], input[type="reset"] {
+  border-radius: 5px;
+  border: solid 1px black;
+  font-size: 1.5em;
+}
+#form_controls {
+  position: fixed;
+  text-align: center;
+  bottom: 0px;
+  height: 2em;
+  width: 100%;
+  padding: .5em 0;
+  border-top: solid 1px #888;
+  background: white;
+}
+    </style>
+
+    <script>
+      function $(...args) {
+        return document.querySelector(...args);
+      }
+
+      onload = function() {
+        $('form').addEventListener('submit', e => {
+alert('fdsafd');
+          e.preventDefault();
+        });
+      }
+    </script>
+  </head>
+
+  <body>
+    <h1>[Unofficial] Oregon OSHA COVID-19 Quick-Report Form</h1>
+    <details open>
+      <summary>F.A.Q.</summary>
+      <dl>
+        <dt>What is this?</dt>
+        <dd>
+      This page is a hack - a simpler, slightly easier-to-use version of <a href="https://www4.cbs.state.or.us/exs/osha/hazrep/" target="_blank">OSHA's official report form</a>, optimized for creating reports for businesses that are not properly following the Oregon COVID guidelines.
+        </dd>
+
+        <dt>Can I trust this?</dt>
+        <dd>
+      Yes... as much as you trust <a href="https://www4.cbs.state.or.us/exs/osha/hazrep/" target="_blank">OSHA's official report form</a> at least.  Information here goes directly to OSHA, exactly as it would with the official form.  It is not stored or shared or otherwise made available to any third parties.
+        </dd>
+
+        <dt>What happens after I've submitted a report?<dt>
+        <dd>You'll have to <a href="https://osha.oregon.gov/Pages/contactus.aspx" target="_blank">ask OSHA</a>.  Once you hit "Submit", it's in their hands.</dd>
+
+      <p>
+      A few things to note:<p>
+      <ol>
+        <li style="font-weight: bold">The maintainers of this form have no affiliation with OSHA.</li>
+        <li>The information you provide is submitted directly to OSHA.  It is not shared with, or stored by, anyone other than OSHA.</li>
+        <li>... which, in case you haven't figured it out yet, means the maintainers have no control over what OSHA does with your reports.</li>
+        <li><span style="color: red; font-weight: bold">*</span> = required field</li>
+      </ol>
+      </p>
+    </details>
+
+    <form action="https://www4.cbs.state.or.us/exs/osha/hazrep/" method="post">
+      <details open>
+        <summary>Your Information (Optional)</summary>
+        <input type="hidden" value="Y" name="reveal_name"> <!-- WTF does this do??? -->
+        <input type="hidden" name="contct_status" value="O"> <!-- Reporter: "Concerned citizen" -->
+        <input type="hidden" value="Y" name="conf" /> <!-- Reporter: Keep info confidential -->
+        <input type="hidden" name="contct_mail_addr"> <!-- Reporter: mailing address -->
+        <input type="hidden" name="contct_city"> <!-- Reporter: city -->
+        <input type="hidden" name="contct_zip"> <!-- Reporter: zip -->
+
+        <label>OSHA may or may not follow up with you if you provide the following</label>
+
+        <label><span class="key">Your Name</span>
+          <input type="text" name="contct_frst_nm" placeholder="Your first name">
+          <input type="text" name="contct_lst_nm" placeholder="Your last name">
+        </label>
+
+        <label><span class="key">Your Email</span><input type="text" name="contct_email"></label>
+        <label><span class="key">... Confirm Email</span><input type="text" name="contct_verify_email"></label>
+        <label><span class="key">Phone</span><input type="text" name="contct_phone"></label>
+        <label><span class="key">Remember this info</span><input type="checkbox" name="x-save-info"></label>
+      </details>
+
+      <details open>
+        <summary>Information About the Business You're Reporting</summary>
+        <input type="hidden" name="emplyr_county" value="Deschutes"> <!-- Business: county -->
+        <input type="hidden" name="emplyr_fax"> <!-- Business: fax -->
+        <input type="hidden" name="emplyr_email"> <!-- Reporter is unlikely to have this -->
+        <input type="hidden" name="emplyr_verify_email"> <!-- Reporter is unlikely to have this -->
+
+        <label class="required"><span class="key">Business Name</span><input type="text" name="emplyr_bus_nm"></label>
+        <label class="required"><span class="key">Business Type</span><input type="text" name="emplyr_bus_type" placeholder="e.g. Grocery, Church, etc."></label>
+        <label class="required"><span class="key">Address</span><input type="text" name="emplyr_street_addr"></label>
+        <label class="required"><span class="key">City</span><input type="text" name="emplyr_city">, OR</label>
+
+        <label class="required"><span class="key">Zip</span><input name="emplyr_zip" placeholder="e.g. 97701"></label>
+
+        <label class="required"><span class="key">Telephone</span><input type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" name="emplyr_phone"></label>
+
+        <label class="required">
+          <span class="key">Business contact (if available)</span>
+          <input type="text" name="emplyr_contct_frst_nm" placeholder="First name">
+          <input type="text" name="emplyr_contct_lst_nm" placeholder="Last name">
+        </label>
+      </details>
+
+      <details open>
+        <summary>Incident Details</summary>
+        <input type="hidden" name="haz_loc" value="Public area">
+
+        <label class="required">
+          <span class="key" style="text-align: left;">Description</span>
+          <textarea name="haz_desc"
+            placeholder="What did or did not happen?  What should or should not have happend?">
+          </textarea>
+        </label>
+
+
+        <label class="required">Business representatives you discussed this incident with (Check all that apply)</label>
+        <label>
+          <input type="checkbox" name="haz_rpt_cowrkr" value="Y">Employee <!-- Coworker -->
+          <input type="checkbox" name="haz_rpt_suprvs" value="Y">Manager <!-- Supervisor -->
+          <input type="checkbox" name="haz_rpt_safety_comm" value="Y">Owner <!-- Safety Committee -->
+          <input type="checkbox" name="haz_rpt_none" value="Y">Incident was not discussed
+        </label>
+      </details>
+
+      <input type="hidden" name="fuseaction" value="home.save_report"> <!-- Server-side action? -->
+
+      <!-- So OSHA knows who to talk to if this form is causing them problems -->
+      <input type="hidden" name="x-generator" value="This report was generated using using https://<TBD>">
+
+      <div id="form_controls">
+      <input type="submit" value="Submit" style="background-color: #6f7">
+      <input type="reset" value="Reset Fields" style="background-color: #f67; margin-left: 3em ">
+      </div>
+    </form>
+  </body>
+</html>

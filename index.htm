@@ -139,12 +139,6 @@
         // Copy email to verified-email because having to enter your email address twice is stupid
         $('#contct_verify_email')[0].value = $('#contct_email')[0].value;
 
-        // Set fields that OSHA requires, but that user may not have to "n/a"
-        for (const id of ['#emplyr_contct_frst_nm', '#emplyr_contct_lst_nm']) {
-          const el = $(id)[0];
-          el.value = el.value || 'n/a';
-        }
-
         // Insert description footer
         const FOOTER = `--- FOOTER ---\n This complaint was created at https://broofa.github.io/oshareport`;
         const desc = descEl.value.replace(/--- FOOTER ---/mg, '').trim();
@@ -189,7 +183,9 @@
     </div>
 
     <form action="https://www4.cbs.state.or.us/exs/osha/hazrep/" method="post">
-      <h2>Your Contact Information (Optional)</h2>
+      <h2>Your Contact Information</h2>
+
+      <p>(This is optional, but needed if you want OSHA to keep you informed of your complaint status)</p>
       <input type="hidden" value="Y" name="reveal_name"> <!-- WTF does this do??? -->
       <input type="hidden" name="contct_status" value="O"> <!-- Complainant: "Concerned citizen" -->
       <input type="hidden" value="Y" name="conf" /> <!-- Complainant: Keep info confidential -->
@@ -197,8 +193,6 @@
       <input type="hidden" name="contct_city"> <!-- Complainant: city -->
       <input type="hidden" name="contct_zip"> <!-- Complainant: zip -->
       <input type="hidden" name="contct_verify_email"> <!-- Complainant: email -->
-
-      <p>Your Contact Information (allows OSHA to keep you informed of your complaint status)</p>
 
       <label><span class="key">Name</span>
         <input type="text" name="contct_frst_nm" placeholder="Your first name">
@@ -214,6 +208,8 @@
       <input type="hidden" name="emplyr_fax"> <!-- Business: fax -->
       <input type="hidden" name="emplyr_email"> <!-- Complainant is unlikely to have this -->
       <input type="hidden" name="emplyr_verify_email"> <!-- Complainant is unlikely to have this -->
+      <input type="hidden" name="emplyr_contct_frst_nm" value="n/a"> <!-- Complainant is unlikely to have this -->
+      <input type="hidden" name="emplyr_contct_lst_nm" value="n/a"> <!-- Complainant is unlikely to have this -->
 
       <label><span class="key">Business Name</span><input required type="text" name="emplyr_bus_nm"></label>
       <label><span class="key">Business Type</span><input required type="text" name="emplyr_bus_type" placeholder="e.g. Retail clothing"></label>
@@ -224,11 +220,6 @@
 
       <label><span class="key">Phone</span><input required type="tel" placeholder="e.g. 541-555-1212" name="emplyr_phone"></label>
 
-      <label>
-        <span class="key">Business contact</span>
-        <input type="text" name="emplyr_contct_frst_nm" placeholder="First name">
-        <input type="text" name="emplyr_contct_lst_nm" placeholder="Last name">
-      </label>
 
       <h2>Incident Details</h2>
       <input type="hidden" name="haz_loc" value="Public area">

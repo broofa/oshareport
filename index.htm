@@ -8,7 +8,7 @@
 
   <body>
     <h1>The Unofficial OSHA COVID-19 Complaint Form</h1>
-    <p style="font-style: italic; color: #888;">
+    <p style="font-style: italic; font-weight: bold; color: #888;">
     A form for submitting complaints to OSHA about businesses that are not
     complying with Oregon COVID-19 restrictions.
     </p>
@@ -42,14 +42,13 @@
       <input type="hidden" name="contct_zip"> <!-- Complainant: zip -->
       <input type="hidden" name="contct_verify_email"> <!-- Complainant: email -->
 
-      <label><span class="key">Name</span>
-        <input type="text" name="contct_frst_nm" placeholder="Your first name">
-        <input type="text" name="contct_lst_nm" placeholder="Your last name">
-      </label>
+      <label><span class="key">Your name</span><input type="text" name="contct_frst_nm" placeholder="First name"></label>
+      <label><span class="key"></span><input type="text" name="contct_lst_nm" placeholder="Last name"></label>
+
 
       <label><span class="key">Email</span><input type="text" name="contct_email"></label>
       <label><span class="key">Phone</span><input type="text" name="contct_phone"></label>
-      <label><span class="key"><input type="checkbox" id="remember_info"></span>Remember my info (store in this browser)</label>
+      <label><span class="key"><input type="checkbox" id="remember_info"></span>Remember my info <span class="commentary">(saved on your device)</span></label>
 
       <h2>Business Contact Information</h2>
       <div> </div>
@@ -82,17 +81,19 @@
 
       <label>Was incident discussed with anyone from the business? (Check any that apply)</label>
 
-      <label>
+      <label style="display: inline-block">
         <input type="checkbox" name="haz_rpt_cowrkr" value="Y">Employee <!-- Coworker -->
-
+      </label>
+      <label style="display: inline-block">
         <input type="checkbox" name="haz_rpt_suprvs" value="Y" style="margin-left: 2em">Manager <!-- Supervisor -->
-
+      </label>
+      <label style="display: inline-block">
         <input type="checkbox" name="haz_rpt_safety_comm" value="Y" style="margin-left: 2em">Owner <!-- Safety Committee -->
       </label>
 
-
       <input type="hidden" name="fuseaction" value="home.save_report"> <!-- Server-side action? -->
 
+      <br />
       <input type="submit" value="Submit">
     </form>
   </body>

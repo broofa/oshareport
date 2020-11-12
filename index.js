@@ -15,7 +15,7 @@ const STORE_FIELDS = [
 ];
 
 // Fields to include in sharable links to the form
-const SHARE_FIELDS = ['#emplyr_bus_nm', '#emplyr_bus_type', '#emplyr_street_addr', '#emplyr_city', '#emplyr_zip', '#emplyr_phone'];
+const SHARE_FIELDS = ['#emplyr_bus_nm', '#emplyr_bus_type', '#emplyr_street_addr', '#emplyr_city', '#emplyr_county', '#emplyr_zip', '#emplyr_phone'];
 
 // The field that indicates whether or not user dicussed the issue with anyone gets derived from
 // other fields

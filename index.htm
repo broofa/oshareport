@@ -2,20 +2,10 @@
 <html>
   <head>
     <style>
-      summary {
-        font-size: 1.2em;
-        font-weight: bold;
-        color: #888;
-      }
-
       html {
         font-family: sans-serif;
         margin-bottom: 3em;
         line-height: 1.3em;
-      }
-      details {
-        padding-top: 0.5em;
-        margin-top: 1em;
       }
       dt {
         font-weight: bold;
@@ -27,11 +17,16 @@
         display: block;
         margin-top: .5em;
       }
+
+      h2 {
+        color: #777;
+      }
+
       textarea {
         display: block;
         font-family: sans-serif;
         min-height: 5em;
-        min-width: 100%;
+        width: 80%;
       }
 
       #navbar {
@@ -47,10 +42,17 @@
         display: inline-block;
         min-width: 8em;
       }
-      label.required .key::after {
-        content: " *";
-        font-weight: bold;
-        color: red;
+
+      input, textarea {
+        border: solid 1px #333;
+        border-radius: 4px;
+      }
+
+      input:valid, textarea:valid {
+        border-color: green;
+      }
+      input:invalid, textarea:invalid {
+        border-color: red;
       }
 
       input:invalid::after {
@@ -59,21 +61,9 @@
         color: red;
       }
 
-      input[type="submit"], input[type="reset"] {
-        border-radius: 5px;
-        cou
-        border: solid 1px black;
+      input[type="submit"] {
+        margin-top: 1em;
         font-size: 1.5em;
-      }
-      #form_controls {
-        position: fixed;
-        text-align: center;
-        bottom: 0px;
-        height: 2em;
-        width: 100%;
-        padding: .5em 0;
-        border-top: solid 1px #888;
-        background: white;
       }
     </style>
 
@@ -99,7 +89,6 @@
         '#contct_frst_nm',
         '#contct_lst_nm',
         '#contct_email',
-        '#contct_verify_email',
         '#contct_phone',
         '#remember_info',
       ];
@@ -142,7 +131,27 @@
         }
       }
 
-      window.addEventListener('load', function() {
+      function onSubmit(e) {
+        const descEl = $('#haz_desc')[0];
+
+        updateDiscussed();
+
+        // Copy email to verified-email because having to enter your email address twice is stupid
+        $('#contct_verify_email')[0].value = $('#contct_email')[0].value;
+
+        // Set fields that OSHA requires, but that user may not have to "n/a"
+        for (const id of ['#emplyr_contct_frst_nm', '#emplyr_contct_lst_nm']) {
+          const el = $(id)[0];
+          el.value = el.value || 'n/a';
+        }
+
+        // Insert description footer
+        const FOOTER = `--- FOOTER ---\n This complaint was created at https://broofa.github.io/oshareport`;
+        const desc = descEl.value.replace(/--- FOOTER ---/mg, '').trim();
+        descEl.value = `${desc}\n\n${FOOTER}`;
+      }
+
+      function onLoad() {
         // Propagate input names to ids
         for (const el of [...$('input'), ...$('textarea')]) {
           if (!el.name) continue;
@@ -150,117 +159,104 @@
         }
 
         // Submit handler
-        $('form')[0].addEventListener('submit', e => {
-          e.preventDefault();
-
-          updateDiscussed();
-
-          // e.preventDefault();
-          // Set fields that OSHA requires, but that user may not have to "n/a"
-          for (const id of ['#emplyr_contct_frst_nm', '#emplyr_contct_lst_nm']) {
-            const el = $(id)[0];
-            el.value = el.value || 'n/a';
-          }
-
-          // Store user info on change
-          storeFields();
-        });
+        $('form')[0].addEventListener('submit', onSubmit);
 
         for (const id of STORE_FIELDS) {
           $(id)[0].addEventListener('change', storeFields);
         }
 
+        // Remove description footer if present
+        setTimeout(function() {
+          const descEl = $('#haz_desc')[0];
+          descEl.value = descEl.value.replace(/--- FOOTER ---\n.*/mg, '').trim();
+        }, 500);
+
+        // Restore user info (if present)
         restoreFields();
-      });
+      }
+
+      window.addEventListener('load', onLoad);
 
     </script>
   </head>
 
   <body>
     <h1>The Unofficial OSHA COVID-19 Complaint Form</h1>
+    <p>Fields outlined in red are <span style="border: solid 1px red; border-radius: 4px">required</span></p>
     <div id="navbar">
-      <a href="./README.md">About</a>
-      <a href="https://www.github.com/broofa/oshareport">GitHub</a>
+      <a href="./README.md" target="_blank">About</a>
+      <a href="https://www.github.com/broofa/oshareport" target="_blank">GitHub</a>
     </div>
 
     <form action="https://www4.cbs.state.or.us/exs/osha/hazrep/" method="post">
-      <details open>
-        <summary>Your Contact Information (Optional)</summary>
-        <input type="hidden" value="Y" name="reveal_name"> <!-- WTF does this do??? -->
-        <input type="hidden" name="contct_status" value="O"> <!-- Complainant: "Concerned citizen" -->
-        <input type="hidden" value="Y" name="conf" /> <!-- Complainant: Keep info confidential -->
-        <input type="hidden" name="contct_mail_addr"> <!-- Complainant: mailing address -->
-        <input type="hidden" name="contct_city"> <!-- Complainant: city -->
-        <input type="hidden" name="contct_zip"> <!-- Complainant: zip -->
+      <h2>Your Contact Information (Optional)</h2>
+      <input type="hidden" value="Y" name="reveal_name"> <!-- WTF does this do??? -->
+      <input type="hidden" name="contct_status" value="O"> <!-- Complainant: "Concerned citizen" -->
+      <input type="hidden" value="Y" name="conf" /> <!-- Complainant: Keep info confidential -->
+      <input type="hidden" name="contct_mail_addr"> <!-- Complainant: mailing address -->
+      <input type="hidden" name="contct_city"> <!-- Complainant: city -->
+      <input type="hidden" name="contct_zip"> <!-- Complainant: zip -->
+      <input type="hidden" name="contct_verify_email"> <!-- Complainant: email -->
 
-        <label>OSHA may or may not follow up with you if you provide the following</label>
+      <p>Your Contact Information (allows OSHA to keep you informed of your complaint status)</p>
 
-        <label><span class="key">Your Name</span>
-          <input type="text" name="contct_frst_nm" placeholder="Your first name">
-          <input type="text" name="contct_lst_nm" placeholder="Your last name">
-        </label>
+      <label><span class="key">Name</span>
+        <input type="text" name="contct_frst_nm" placeholder="Your first name">
+        <input type="text" name="contct_lst_nm" placeholder="Your last name">
+      </label>
 
-        <label><span class="key">Your Email</span><input type="text" name="contct_email"></label>
-        <label><span class="key">... Confirm Email</span><input type="text" name="contct_verify_email"></label>
-        <label><span class="key">Phone</span><input type="text" name="contct_phone"></label>
-        <label><span class="key">Remember my information</span><input type="checkbox" id="remember_info"></label>
-      </details>
+      <label><span class="key">Email</span><input type="text" name="contct_email"></label>
+      <label><span class="key">Phone</span><input type="text" name="contct_phone"></label>
+      <label><span class="key"><input type="checkbox" id="remember_info"></span>Remember my info (store in this browser)</label>
 
-      <details open>
-        <summary>Business Contact Information</summary>
-        <input type="hidden" name="emplyr_county" value="Deschutes"> <!-- Business: county -->
-        <input type="hidden" name="emplyr_fax"> <!-- Business: fax -->
-        <input type="hidden" name="emplyr_email"> <!-- Complainant is unlikely to have this -->
-        <input type="hidden" name="emplyr_verify_email"> <!-- Complainant is unlikely to have this -->
+      <h2>Business Contact Information</h2>
+      <input type="hidden" name="emplyr_county" value="Deschutes"> <!-- Business: county -->
+      <input type="hidden" name="emplyr_fax"> <!-- Business: fax -->
+      <input type="hidden" name="emplyr_email"> <!-- Complainant is unlikely to have this -->
+      <input type="hidden" name="emplyr_verify_email"> <!-- Complainant is unlikely to have this -->
 
-        <label class="required"><span class="key">Business Name</span><input type="text" name="emplyr_bus_nm"></label>
-        <label class="required"><span class="key">Business Type</span><input type="text" name="emplyr_bus_type" placeholder="e.g. Grocery, Church, etc."></label>
-        <label class="required"><span class="key">Address</span><input type="text" name="emplyr_street_addr"></label>
-        <label class="required"><span class="key">City</span><input type="text" name="emplyr_city">, OR</label>
+      <label><span class="key">Business Name</span><input required type="text" name="emplyr_bus_nm"></label>
+      <label><span class="key">Business Type</span><input required type="text" name="emplyr_bus_type" placeholder="e.g. Retail clothing"></label>
+      <label><span class="key">Address</span><input required type="text" name="emplyr_street_addr"></label>
+      <label><span class="key">City</span><input required type="text" name="emplyr_city">, OR</label>
 
-        <label class="required"><span class="key">Zip</span><input name="emplyr_zip" placeholder="e.g. 97701"></label>
+      <label><span class="key">Zip</span><input required name="emplyr_zip" placeholder="e.g. 97701"></label>
 
-        <label class="required"><span class="key">Telephone</span><input type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" name="emplyr_phone"></label>
+      <label><span class="key">Phone</span><input required type="tel" placeholder="e.g. 541-555-1212" name="emplyr_phone"></label>
 
-        <label>
-          <span class="key">Business contact person (if available)</span>
-          <input type="text" name="emplyr_contct_frst_nm" placeholder="First name">
-          <input type="text" name="emplyr_contct_lst_nm" placeholder="Last name">
-        </label>
-      </details>
+      <label>
+        <span class="key">Business contact</span>
+        <input type="text" name="emplyr_contct_frst_nm" placeholder="First name">
+        <input type="text" name="emplyr_contct_lst_nm" placeholder="Last name">
+      </label>
 
-      <details open>
-        <summary>Incident Details</summary>
-        <input type="hidden" name="haz_loc" value="Public area">
+      <h2>Incident Details</h2>
+      <input type="hidden" name="haz_loc" value="Public area">
+      <input type="hidden" name="haz_rpt_none" value="Y"> <!-- Not discussed with anyone -->
 
-        <label class="required">
-          <span class="key" style="text-align: left;">Description</span>
-          <textarea name="haz_desc" placeholder=""></textarea>
-        </label>
+      <label>
+        <span class="key" style="text-align: left;">Description</span>
+        <textarea required name="haz_desc" placeholder=""></textarea>
+      </label>
 
 
-        <label class="required">Was incident discussed with anyone from the business? (Check all that apply)</label>
-        <label>
-          <input type="checkbox" name="haz_rpt_cowrkr" value="Y">Employee <!-- Coworker -->
-        </label>
-        <label>
-          <input type="checkbox" name="haz_rpt_suprvs" value="Y">Manager <!-- Supervisor -->
-          </label>
-        <label>
-          <input type="checkbox" name="haz_rpt_safety_comm" value="Y">Owner <!-- Safety Committee -->
-          </label>
-          <input type="hidden" name="haz_rpt_none" value="Y">
-      </details>
+      <label>Was incident discussed with anyone from the business? (Check all that apply)</label>
+
+      <label>
+        <input type="checkbox" name="haz_rpt_cowrkr" value="Y">Employee <!-- Coworker -->
+
+        <input type="checkbox" name="haz_rpt_suprvs" value="Y" style="margin-left: 2em">Manager <!-- Supervisor -->
+
+        <input type="checkbox" name="haz_rpt_safety_comm" value="Y" style="margin-left: 2em">Owner <!-- Safety Committee -->
+      </label>
+
 
       <input type="hidden" name="fuseaction" value="home.save_report"> <!-- Server-side action? -->
 
       <!-- So OSHA knows who to talk to if this form is causing them problems -->
       <input type="hidden" name="x-generator" value="This report was generated using using https://<TBD>">
 
-      <div id="form_controls">
-        <input type="submit" value="Submit" style="background-color: #6f7">
-        <input type="reset" value="Reset" style="background-color: #f67; margin-left: 3em " tabindex="-1">
-      </div>
+      <input type="submit" value="Submit">
     </form>
   </body>
 </html>

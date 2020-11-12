@@ -1,0 +1,63 @@
+html {
+  font-family: sans-serif;
+  margin-bottom: 3em;
+  line-height: 1.3em;
+}
+dt {
+  font-weight: bold;
+  margin-top: .5em;
+  opacity: .75;
+}
+
+label {
+  display: block;
+  margin-top: .5em;
+}
+
+h2 {
+  color: #777;
+}
+
+textarea {
+  display: block;
+  font-family: sans-serif;
+  min-height: 5em;
+  width: 80%;
+}
+
+#navbar {
+  position:absolute;
+  top: 0;
+  right: 0;
+  margin: .5em;
+}
+
+.key{
+  text-align: right;
+  margin-right: .5em;
+  display: inline-block;
+  min-width: 8em;
+}
+
+input, textarea {
+  border: solid 1px #333;
+  border-radius: 4px;
+}
+
+input:valid, textarea:valid {
+  border-color: green;
+}
+input:invalid, textarea:invalid {
+  border-color: red;
+}
+
+input:invalid::after {
+  content: " \26A0";
+  font-size: 2em;
+  color: red;
+}
+
+input[type="submit"] {
+  margin-top: 1em;
+  font-size: 1.5em;
+}

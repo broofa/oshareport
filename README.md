@@ -2,23 +2,34 @@
 
 ## What is this?
 
-Briefly, this is a simpler, easier-to-use version of the [Oregon OSHA complaint
-form](https://www4.cbs.state.or.us/exs/osha/hazrep/), optimized for creating
-reports about businesses not complying with the State's COVID directives.
+This is streamlined version of the [Oregon OSHA complaint
+form](https://www4.cbs.state.or.us/exs/osha/hazrep/), designed to make it easier
+to report businesses that do not comply with the State's COVID guidelines.
+
+## Why is this a thing?
+
+If a business fails to enforce basic COVID guidelines, their patrons have little
+in the way of recourse.  According to the State, OSHA is responsible for
+enforcement, however the existing form for submitting conerns is simply not
+designed for this purpose.  It's oriented more toward employees that need to
+bring attention to common workplace safety issues, and is unnecessarily complex
+and unintuitive.  By providing a better experience, it is hoped people will be
+more willing to file issues and, thus, bring more attention to unsafe
+conditions.
 
 ## Can I trust this?
 
 Yes... at least to the extent you trust OSHA.  Information entered in this form
-is sent directly to OSHA, exactly as it would if you were using OSHA's official
-site.  This form does not store, share or otherwise disseminate your information
-with any third parties.
+is sent directly to OSHA, exactly as it would be if you were entering
+information directly on OSHA's site.  This form does not store, share or
+otherwise disseminate any information with third parties.
 
-The source code for this form is available for review and comment at
+If you have concerns, the source code is available for review and comment at
 https://www.github.com/broofa/oshareport
 
-## Something's not working...
+## Help...!
 
-Got a question or concern about a complaint?  Want to followup with OSHA?  Not
-feeling like your complaint is being properly handled?  Please [contact OSHA](https://osha.oregon.gov/Pages/contactus.aspx) directly.
+Any question or concerns that are not specifically about the technical
+implementation of this form should be [sent to OSHA](https://osha.oregon.gov/Pages/contactus.aspx) directly.
 
-For technical issues or questions with this *specific* form page, please visit Broofa's [oshareport GitHub project](https://www.github.com/broofa/oshareport).
+Technical questions and comments about this form page can be submitted on [the GitHub project page](https://www.github.com/broofa/oshareport).

@@ -2,120 +2,196 @@
 <html>
   <head>
     <style>
-html {
-  font-family: sans-serif;
-  margin-bottom: 3em;
-  line-height: 1.3em;
-}
-summary {
-  font-size: 1.2em;
-  font-weight: bold;
-  color: #888;
-}
-details {
-  border-top: solid 1px #ccc;
-  padding-top: 0.5em;
-  margin-top: 0.5em;
-}
-dt {
-  font-weight: bold;
-  margin-top: .5em;
-  opacity: .75;
-}
+      summary {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #888;
+      }
 
-label {
-  display: block;
-  margin-top: .5em;
-}
-textarea {
-  display: block;
-  font-family: sans-serif;
-  min-height: 5em;
-  min-width: 100%;
-}
-.key{
-  text-align: right;
-  margin-right: .5em;
-  display: inline-block;
-  min-width: 8em;
-}
-label.required .key::after {
-  content: " *";
-  font-weight: bold;
-  color: red;
-}
-input[type="checkbox"] {margin-left: 2em;}
-input[type="checkbox"]:first-child {margin-left: 0;}
+      html {
+        font-family: sans-serif;
+        margin-bottom: 3em;
+        line-height: 1.3em;
+      }
+      details {
+        padding-top: 0.5em;
+        margin-top: 1em;
+      }
+      dt {
+        font-weight: bold;
+        margin-top: .5em;
+        opacity: .75;
+      }
 
-input[type="submit"], input[type="reset"] {
-  border-radius: 5px;
-  border: solid 1px black;
-  font-size: 1.5em;
-}
-#form_controls {
-  position: fixed;
-  text-align: center;
-  bottom: 0px;
-  height: 2em;
-  width: 100%;
-  padding: .5em 0;
-  border-top: solid 1px #888;
-  background: white;
-}
+      label {
+        display: block;
+        margin-top: .5em;
+      }
+      textarea {
+        display: block;
+        font-family: sans-serif;
+        min-height: 5em;
+        min-width: 100%;
+      }
+
+      #navbar {
+        position:absolute;
+        top: 0;
+        right: 0;
+        margin: .5em;
+      }
+
+      .key{
+        text-align: right;
+        margin-right: .5em;
+        display: inline-block;
+        min-width: 8em;
+      }
+      label.required .key::after {
+        content: " *";
+        font-weight: bold;
+        color: red;
+      }
+
+      input:invalid::after {
+        content: " \26A0";
+        font-size: 2em;
+        color: red;
+      }
+
+      input[type="submit"], input[type="reset"] {
+        border-radius: 5px;
+        cou
+        border: solid 1px black;
+        font-size: 1.5em;
+      }
+      #form_controls {
+        position: fixed;
+        text-align: center;
+        bottom: 0px;
+        height: 2em;
+        width: 100%;
+        padding: .5em 0;
+        border-top: solid 1px #888;
+        background: white;
+      }
     </style>
 
     <script>
       function $(...args) {
-        return document.querySelector(...args);
+        return document.querySelectorAll(...args);
       }
 
-      onload = function() {
-        $('form').addEventListener('submit', e => {
-alert('fdsafd');
-          e.preventDefault();
-        });
+      // The field that indicates whether or not user dicussed the issue with anyone gets derived from
+      // other fields
+      function updateDiscussed() {
+        const DISCUSS_TYPES = [
+          '#haz_rpt_cowrkr',
+          '#haz_rpt_suprvs',
+          '#haz_rpt_safety_comm',
+        ];
+
+        const didDiscuss = DISCUSS_TYPES.reduce((v, id) => v || $(id)[0].checked, false);
+        $('#haz_rpt_none')[0].value = didDiscuss ? '' : 'Y';
       }
+
+      const STORE_FIELDS = [
+        '#contct_frst_nm',
+        '#contct_lst_nm',
+        '#contct_email',
+        '#contct_verify_email',
+        '#contct_phone',
+        '#remember_info',
+      ];
+
+      const STORE_KEY = 'oshaFields';
+
+      function storeFields() {
+        const vals = {};
+
+        if (!$('#remember_info')[0].checked) {
+          localStorage.clear();
+          return;
+        };
+
+        for (const id of STORE_FIELDS) {
+          const el = $(id)[0];
+          vals[id] = el.type == 'checkbox' ? el.checked : el.value;
+        }
+
+        console.log('STORE', vals);
+        localStorage.setItem(STORE_KEY, JSON.stringify(vals));
+      }
+
+      function restoreFields() {
+        let fields;
+        try {
+          fields = JSON.parse(window.localStorage.getItem(STORE_KEY));
+        } catch (err) {
+          // non-existent or invalid... ignore.
+        }
+        if (!fields) return;
+
+        for (const [id, value] of Object.entries(fields)) {
+          const el = $(id)[0];
+          if (typeof(value) == 'boolean') {
+            el.checked = value;
+          } else {
+            el.value = value;
+          }
+        }
+      }
+
+      window.addEventListener('load', function() {
+        // Propagate input names to ids
+        for (const el of [...$('input'), ...$('textarea')]) {
+          if (!el.name) continue;
+          el.id = el.name;
+        }
+
+        // Submit handler
+        $('form')[0].addEventListener('submit', e => {
+          e.preventDefault();
+
+          updateDiscussed();
+
+          // e.preventDefault();
+          // Set fields that OSHA requires, but that user may not have to "n/a"
+          for (const id of ['#emplyr_contct_frst_nm', '#emplyr_contct_lst_nm']) {
+            const el = $(id)[0];
+            el.value = el.value || 'n/a';
+          }
+
+          // Store user info on change
+          storeFields();
+        });
+
+        for (const id of STORE_FIELDS) {
+          $(id)[0].addEventListener('change', storeFields);
+        }
+
+        restoreFields();
+      });
+
     </script>
   </head>
 
   <body>
-    <h1>[Unofficial] Oregon OSHA COVID-19 Quick-Report Form</h1>
-    <details open>
-      <summary>F.A.Q.</summary>
-      <dl>
-        <dt>What is this?</dt>
-        <dd>
-      This page is a hack - a simpler, slightly easier-to-use version of <a href="https://www4.cbs.state.or.us/exs/osha/hazrep/" target="_blank">OSHA's official report form</a>, optimized for creating reports for businesses that are not properly following the Oregon COVID guidelines.
-        </dd>
-
-        <dt>Can I trust this?</dt>
-        <dd>
-      Yes... as much as you trust <a href="https://www4.cbs.state.or.us/exs/osha/hazrep/" target="_blank">OSHA's official report form</a> at least.  Information here goes directly to OSHA, exactly as it would with the official form.  It is not stored or shared or otherwise made available to any third parties.
-        </dd>
-
-        <dt>What happens after I've submitted a report?<dt>
-        <dd>You'll have to <a href="https://osha.oregon.gov/Pages/contactus.aspx" target="_blank">ask OSHA</a>.  Once you hit "Submit", it's in their hands.</dd>
-
-      <p>
-      A few things to note:<p>
-      <ol>
-        <li style="font-weight: bold">The maintainers of this form have no affiliation with OSHA.</li>
-        <li>The information you provide is submitted directly to OSHA.  It is not shared with, or stored by, anyone other than OSHA.</li>
-        <li>... which, in case you haven't figured it out yet, means the maintainers have no control over what OSHA does with your reports.</li>
-        <li><span style="color: red; font-weight: bold">*</span> = required field</li>
-      </ol>
-      </p>
-    </details>
+    <h1>The Unofficial OSHA COVID-19 Complaint Form</h1>
+    <div id="navbar">
+      <a href="./README.md">About</a>
+      <a href="https://www.github.com/broofa/oshareport">GitHub</a>
+    </div>
 
     <form action="https://www4.cbs.state.or.us/exs/osha/hazrep/" method="post">
       <details open>
-        <summary>Your Information (Optional)</summary>
+        <summary>Your Contact Information (Optional)</summary>
         <input type="hidden" value="Y" name="reveal_name"> <!-- WTF does this do??? -->
-        <input type="hidden" name="contct_status" value="O"> <!-- Reporter: "Concerned citizen" -->
-        <input type="hidden" value="Y" name="conf" /> <!-- Reporter: Keep info confidential -->
-        <input type="hidden" name="contct_mail_addr"> <!-- Reporter: mailing address -->
-        <input type="hidden" name="contct_city"> <!-- Reporter: city -->
-        <input type="hidden" name="contct_zip"> <!-- Reporter: zip -->
+        <input type="hidden" name="contct_status" value="O"> <!-- Complainant: "Concerned citizen" -->
+        <input type="hidden" value="Y" name="conf" /> <!-- Complainant: Keep info confidential -->
+        <input type="hidden" name="contct_mail_addr"> <!-- Complainant: mailing address -->
+        <input type="hidden" name="contct_city"> <!-- Complainant: city -->
+        <input type="hidden" name="contct_zip"> <!-- Complainant: zip -->
 
         <label>OSHA may or may not follow up with you if you provide the following</label>
 
@@ -127,15 +203,15 @@ alert('fdsafd');
         <label><span class="key">Your Email</span><input type="text" name="contct_email"></label>
         <label><span class="key">... Confirm Email</span><input type="text" name="contct_verify_email"></label>
         <label><span class="key">Phone</span><input type="text" name="contct_phone"></label>
-        <label><span class="key">Remember this info</span><input type="checkbox" name="x-save-info"></label>
+        <label><span class="key">Remember my information</span><input type="checkbox" id="remember_info"></label>
       </details>
 
       <details open>
-        <summary>Information About the Business You're Reporting</summary>
+        <summary>Business Contact Information</summary>
         <input type="hidden" name="emplyr_county" value="Deschutes"> <!-- Business: county -->
         <input type="hidden" name="emplyr_fax"> <!-- Business: fax -->
-        <input type="hidden" name="emplyr_email"> <!-- Reporter is unlikely to have this -->
-        <input type="hidden" name="emplyr_verify_email"> <!-- Reporter is unlikely to have this -->
+        <input type="hidden" name="emplyr_email"> <!-- Complainant is unlikely to have this -->
+        <input type="hidden" name="emplyr_verify_email"> <!-- Complainant is unlikely to have this -->
 
         <label class="required"><span class="key">Business Name</span><input type="text" name="emplyr_bus_nm"></label>
         <label class="required"><span class="key">Business Type</span><input type="text" name="emplyr_bus_type" placeholder="e.g. Grocery, Church, etc."></label>
@@ -146,8 +222,8 @@ alert('fdsafd');
 
         <label class="required"><span class="key">Telephone</span><input type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" name="emplyr_phone"></label>
 
-        <label class="required">
-          <span class="key">Business contact (if available)</span>
+        <label>
+          <span class="key">Business contact person (if available)</span>
           <input type="text" name="emplyr_contct_frst_nm" placeholder="First name">
           <input type="text" name="emplyr_contct_lst_nm" placeholder="Last name">
         </label>
@@ -159,19 +235,21 @@ alert('fdsafd');
 
         <label class="required">
           <span class="key" style="text-align: left;">Description</span>
-          <textarea name="haz_desc"
-            placeholder="What did or did not happen?  What should or should not have happend?">
-          </textarea>
+          <textarea name="haz_desc" placeholder=""></textarea>
         </label>
 
 
-        <label class="required">Business representatives you discussed this incident with (Check all that apply)</label>
+        <label class="required">Was incident discussed with anyone from the business? (Check all that apply)</label>
         <label>
           <input type="checkbox" name="haz_rpt_cowrkr" value="Y">Employee <!-- Coworker -->
-          <input type="checkbox" name="haz_rpt_suprvs" value="Y">Manager <!-- Supervisor -->
-          <input type="checkbox" name="haz_rpt_safety_comm" value="Y">Owner <!-- Safety Committee -->
-          <input type="checkbox" name="haz_rpt_none" value="Y">Incident was not discussed
         </label>
+        <label>
+          <input type="checkbox" name="haz_rpt_suprvs" value="Y">Manager <!-- Supervisor -->
+          </label>
+        <label>
+          <input type="checkbox" name="haz_rpt_safety_comm" value="Y">Owner <!-- Safety Committee -->
+          </label>
+          <input type="hidden" name="haz_rpt_none" value="Y">
       </details>
 
       <input type="hidden" name="fuseaction" value="home.save_report"> <!-- Server-side action? -->
@@ -180,8 +258,8 @@ alert('fdsafd');
       <input type="hidden" name="x-generator" value="This report was generated using using https://<TBD>">
 
       <div id="form_controls">
-      <input type="submit" value="Submit" style="background-color: #6f7">
-      <input type="reset" value="Reset Fields" style="background-color: #f67; margin-left: 3em ">
+        <input type="submit" value="Submit" style="background-color: #6f7">
+        <input type="reset" value="Reset" style="background-color: #f67; margin-left: 3em " tabindex="-1">
       </div>
     </form>
   </body>

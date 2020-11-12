@@ -106,6 +106,9 @@ function onLoad() {
     el.id = el.name;
   }
 
+  // Target links to new window
+  for (const el of $('a')) el.target = '_blank';
+
   // Fill in fields from query params
   paramsToForm();
 

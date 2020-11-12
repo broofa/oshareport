@@ -8,20 +8,32 @@
 
   <body>
     <h1>The Unofficial OSHA COVID-19 Complaint Form</h1>
-    <p>
-    A form for submitting complaints to OSHA about businesses not complying with COVID-19 guidelines.  Submissions go directly to OSHA, the same as <a href="https://www4.cbs.state.or.us/exs/osha/hazrep/">the official version</a>.  ("Submit" takes you to OSHA's site for confirmation.)  This version is just a bit easier to use.
-See the <a href="./README.md" target="_blank">About page</a> for more</p>
+    <p style="font-style: italic; color: #888;">
+    A form for submitting complaints to OSHA about businesses that are not
+    complying with Oregon COVID-19 restrictions.
     </p>
-    <p>Fields outlined in red are <span style="border: solid 1px red; border-radius: 4px">required</span></p>
+
+    <p class="commentary">
+    This form is not maintained by
+    OSHA (hence, "unofficial"), but it works with their system.  "Submit" sends your complaint
+    directly to them, exactly as if you had used
+    <a href="https://www4.cbs.state.or.us/exs/osha/hazrep/">the official form</a>.
+    See the <a href="./README.md">About page</a> for details.
+    </p>
+
+    <p class="commentary">
+    Fields outlined in red are <span style="border: solid 1px red; border-radius: 4px">required</span>
+    </p>
+
     <div id="navbar">
-      <a href="./README.md" target="_blank">About</a>
-      <a href="https://www.github.com/broofa/oshareport" target="_blank">GitHub</a>
+      <a href="./README.md">About</a>
+      <a href="https://www.github.com/broofa/oshareport">GitHub</a>
     </div>
 
     <form action="https://www4.cbs.state.or.us/exs/osha/hazrep/" method="post">
       <h2>Your Contact Information</h2>
 
-      <p>(This is optional, but needed if you want OSHA to keep you informed of your complaint status)</p>
+      <p class="commentary">(This is optional, but needed if you want OSHA to keep you informed of your complaint status)</p>
       <input type="hidden" value="Y" name="reveal_name"> <!-- WTF does this do??? -->
       <input type="hidden" name="contct_status" value="O"> <!-- Complainant: "Concerned citizen" -->
       <input type="hidden" value="Y" name="conf" /> <!-- Complainant: Keep info confidential -->
@@ -50,7 +62,7 @@ See the <a href="./README.md" target="_blank">About page</a> for more</p>
       <label><span class="key">Business Name</span><input required type="text" name="emplyr_bus_nm"></label>
       <label><span class="key">Business Type</span><input required type="text" name="emplyr_bus_type" placeholder="e.g. Retail clothing"></label>
       <label><span class="key">Address</span><input required type="text" name="emplyr_street_addr"></label>
-      <label><span class="key">City</span><input required type="text" name="emplyr_city">, OR</label>
+      <label><span class="key">City</span><input required type="text" name="emplyr_city">, Oregon</label>
       <label><span class="key">County</span><input required type="text" name="emplyr_county" placeholder="e.g. Deschutes"></label>
 
       <label><span class="key">Zip</span><input required name="emplyr_zip" placeholder="e.g. 97701"></label>

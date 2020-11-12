@@ -1,7 +1,6 @@
 html {
   font-family: sans-serif;
   margin-bottom: 3em;
-  line-height: 1.3em;
 }
 dt {
   font-weight: bold;
@@ -16,6 +15,13 @@ label {
 
 h2 {
   color: #777;
+}
+
+p {
+  line-height: 150%;
+}
+.commentary {
+  font-size: 10pt;
 }
 
 textarea {

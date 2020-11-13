@@ -133,6 +133,13 @@ function onLoad() {
 
   // Restore user info (if present)
   restoreFields();
+
+
+  // Add page counter;
+  const counter = document.createElement('img');
+  counter.src = `https://counter.websiteout.net/compte.php?S=${location.hostname}/oshareport&C=17&D=4&N=0&M=0`;
+  counter.id = 'counter';
+  document.body.appendChild(counter);
 }
 
 window.addEventListener('DOMContentLoaded', onLoad);

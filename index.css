@@ -2,6 +2,9 @@ html {
   font-family: sans-serif;
   margin-bottom: 3em;
 }
+body {
+  position: relative;
+}
 dt {
   font-weight: bold;
   margin-top: .5em;
@@ -41,9 +44,6 @@ textarea {
 #navbar * {
   margin-right: 1em;
 }
-#navbar img {
-  opacity: .2;
-}
 
 .key{
   text-align: right;
@@ -73,4 +73,13 @@ input:invalid::after {
 input[type="submit"] {
   margin-top: 1em;
   font-size: 1.5em;
+}
+
+#counter {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: block;
+  right: 0;
+  opacity: .2;
 }

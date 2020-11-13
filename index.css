@@ -21,7 +21,7 @@ p {
   line-height: 150%;
 }
 .commentary {
-  font-size: 80%;
+  font-size: 85%;
 }
 
 textarea {
@@ -36,6 +36,10 @@ textarea {
   top: 0;
   right: 0;
   margin: .5em;
+}
+#navbar * {
+  margin-right: 1em;
+  vertical-ali
 }
 
 .key{
@@ -66,4 +70,10 @@ input:invalid::after {
 input[type="submit"] {
   margin-top: 1em;
   font-size: 1.5em;
+}
+
+#counter {
+  opacity: .5;
+  margin-top: .5em;
+  float: right;
 }

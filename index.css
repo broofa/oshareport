@@ -36,10 +36,13 @@ textarea {
   top: 0;
   right: 0;
   margin: .5em;
+  text-align: right;
 }
 #navbar * {
   margin-right: 1em;
-  vertical-ali
+}
+#navbar img {
+  opacity: .2;
 }
 
 .key{
@@ -70,10 +73,4 @@ input:invalid::after {
 input[type="submit"] {
   margin-top: 1em;
   font-size: 1.5em;
-}
-
-#counter {
-  opacity: .5;
-  margin-top: .5em;
-  float: right;
 }

@@ -1,5 +1,9 @@
 # The Unofficial OSHA COVID-19 Report Form
 
+<p style="border: solid 4px #f00; font-weight: bold; border-radius: 1em; padding: 1em">
+NOTE: This form no longer works due to changes made by OSHA to their website.  Unfortunately, those changes don't include anything to make filing COVID complaints easier.  If you have suggestions for how they might improve things, please contact <a href="mailto:tech.web@oregon.gov">tech.web@oregon.gov</a>.
+</p>
+
 ## What is this?
 
 This is a streamlined version of the [Oregon OSHA complaint form](https://www4.cbs.state.or.us/exs/osha/hazrep/), but reworked to make it easier to report businesses that do not comply with the State's COVID guidelines.
